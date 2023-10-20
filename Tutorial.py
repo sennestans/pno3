@@ -101,7 +101,7 @@ print(pe.value(m.wm3))
 ## Oefening 3
 #Los op voor dezelfde situatie maar nu moet de wasmachine 2 tijdsperiodes na elkaar gedraaid hebben.
 
-wm_con_expr = (m.wm1 ==1 and m.wm2 == 1 and m.wm3==0) or m.wm1 ==1 && m.wm2 == 1 or
+wm_con_expr = (m.wm1 ==1 and m.wm2 == 1 and m.wm3==0) or m.wm1 ==1 & m.wm2 == 1 or
 wm_con_expr = m.wm2 + m.wm3 == 2
 wm_con_expr = m.wm1 + m.wm2 + m.wm3 == 2
 
