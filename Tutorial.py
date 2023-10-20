@@ -101,13 +101,11 @@ print(pe.value(m.wm3))
 ## Oefening 3
 #Los op voor dezelfde situatie maar nu moet de wasmachine 2 tijdsperiodes na elkaar gedraaid hebben.
 
-wm_con_expr = (m.wm1 ==1 and m.wm2 == 1 and m.wm3==0) or m.wm1 ==1 && m.wm2 == 1 or
-wm_con_expr = m.wm2 + m.wm3 == 2
-wm_con_expr = m.wm1 + m.wm2 + m.wm3 == 2
+wm_con_expr = m.wm1 + m.wm2 + m.wm3==2
+wm_con_expr_2 = m.wm1 + m.wm3 ==1
 
 m.wm_con = pe.Constraint(expr = wm_con_expr)
-m.wm_con = pe.Constraint(expr = wm_con_expr)
-m.wm_con = pe.Constraint(expr = wm_con_expr)
+m.wm_con_2 = pe.Constraint(expr = wm_con_expr_2)
 
 # Optimize model
 result = solver.solve(m)
@@ -129,14 +127,6 @@ radiation_t2 = 800 W/m<sup>2</sup> \
 radiation_t3 = 200 W/m<sup>2</sup> \
 efficientie_zonnepaneel = 20% \
 (deze energie kost je niets!)
-
-# irradiantie van de zon (varieert per tijdsinterval) (kWh/m^2)
-r1 = 0.05
-r2 = 0.8 # meest zon over de middag
-r3  = 0.2
-
-zp_opp = 0.9 # oppervlakte zonnepaneel (m^2)
-eff = 0.2  # efficientie zonnepaneel
 '''
 # irradiantie van de zon (varieert per tijdsinterval) (kWh/m^2)
 r1 = 0.05
