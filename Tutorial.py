@@ -138,3 +138,36 @@ r3  = 0.2
 zp_opp = 0.9 # oppervlakte zonnepaneel (m^2)
 eff = 0.2  # efficientie zonnepaneel
 '''
+# irradiantie van de zon (varieert per tijdsinterval) (kWh/m^2)
+r1 = 0.05
+r2 = 0.8 # meest zon over de middag
+r3  = 0.2
+
+zp_opp = 0.9 # oppervlakte zonnepaneel (m^2)
+eff = 0.2  # efficientie zonnepaneel
+
+solver = po.SolverFactory('glpk')
+
+m = pe.ConcreteModel()
+# Create variables: wm1, wm2, wm3: de aan/uit-stand van de wasmachine gedurende tijdsinterval t1, t2 en t3 respectivelijk
+m.wm1 = pe.Var(domain = pe.Binary)
+m.wm2 = pe.Var(domain = pe.Binary)
+m.wm3 = pe.Var(domain = pe.Binary)
+
+# Set objective: zo weinig mogelijk kosten
+obj_expr = Delta_t*ewm*((c1-eff*r1)*m.wm1 + (c2-eff*r2)*m.wm2 + (c3-eff*r3)*m.wm3)
+m.obj = pe.Objective(sense = pe.minimize, expr = obj_expr)
+
+# Add constraints: de wasmachine moet gedurende 1 tijdsinterval aanstaan
+wm_con_expr = m.wm1 + m.wm2 + m.wm3 == 1
+m.wm_con = pe.Constraint(expr = wm_con_expr)
+
+# Optimize model
+result = solver.solve(m)
+
+#print(result)
+
+print(pe.value(m.obj))
+print(pe.value(m.wm1))
+print(pe.value(m.wm2))
+print(pe.value(m.wm3))
