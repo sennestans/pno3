@@ -139,22 +139,43 @@ eff = 0.2  # efficientie zonnepaneel
 solver = po.SolverFactory('glpk')
 
 m = pe.ConcreteModel()
+
 # Create variables: wm1, wm2, wm3: de aan/uit-stand van de wasmachine gedurende tijdsinterval t1, t2 en t3 respectivelijk
 m.wm1 = pe.Var(domain = pe.Binary)
 m.wm2 = pe.Var(domain = pe.Binary)
 m.wm3 = pe.Var(domain = pe.Binary)
+# Create additional help variables: e1, e2, e3: aangekochte energie gedurende t1, t2 en t3 respectievelijk
+m.ekoop1 = pe.Var()
+m.ekoop2 = pe.Var()
+m.ekoop3 = pe.Var()
+
+m.verkoop1 = pe.Var()
+m.verkoop2 = pe.Var()
+m.verkoop3 = pe.Var()
 
 # Set objective: zo weinig mogelijk kosten
-obj_expr = Delta_t*ewm*((c1-eff*r1)*m.wm1 + (c2-eff*r2)*m.wm2 + (c3-eff*r3)*m.wm3)
+obj_expr = (c1*m.ekoop1 + c2*m.ekoop2 + c3*m.ekoop3)
 m.obj = pe.Objective(sense = pe.minimize, expr = obj_expr)
 
-# Add constraints: de wasmachine moet gedurende 1 tijdsinterval aanstaan
+# Add constraints: de wasmachine moet gedurende 2 tijdsintervallen aanstaan
 wm_con_expr = m.wm1 + m.wm2 + m.wm3 == 1
 m.wm_con = pe.Constraint(expr = wm_con_expr)
+# Add constraints: energiebalans per tijdsinterval
+con_eb1_expr = m.ekoop1 == max(0,Delta_t*m.wm1*(ewm - r1*zp_opp*eff))
+con_eb2_expr = m.ekoop2 == max(0,Delta_t*m.wm2*(ewm - r2*zp_opp*eff))
+con_eb3_expr = m.ekoop3 == max(0,Delta_t*m.wm3*(ewm - r3*zp_opp*eff))
 
-# Optimize model
-result = solver.solve(m)
+con_everkoop1 = m.verkoop1 == min(0,Delta_t*m.wm1*(ewm - r1*zp_opp*eff))
+con_everkoop2 = m.verkoop2 == min(0,Delta_t*m.wm2*(ewm - r2*zp_opp*eff))
+con_everkoop3 = m.verkoop3 == min(0,Delta_t*m.wm3*(ewm - r3*zp_opp*eff))
 
+
+m.eb1 = pe.Constraint(expr = con_eb1_expr)
+m.eb2 = pe.Constraint(expr = con_eb2_expr)
+m.eb3 = pe.Constraint(expr = con_eb3_expr)
+m.everkoop1 = pe.Constraint(expr = con_everkoop1)
+m.everkoop2 = pe.Constraint(expr = con_everkoop2)
+m.everkoop3 = pe.Constraint(expr = con_everkoop3)
 #print(result)
 
 print(pe.value(m.obj))
