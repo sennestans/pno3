@@ -1,0 +1,19 @@
+
+.custom-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #cc0000;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px #888888;
+    color: #fff;
+}
+
+.date1-button {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #0c0c0c;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px #888888;
+    color: #fff;
+
+}
