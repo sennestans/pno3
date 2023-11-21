@@ -60,7 +60,7 @@ T_in = np.zeros([n])
 T_m = np.zeros([n])
 T_in[0] = T_in_0
 T_m[0] = T_m_0
-T_out = [18+273.15]
+T_out = [10+273.15]
 for i in range(60**3):
     T_out += [10+273.15]
 for i in range(1,n):

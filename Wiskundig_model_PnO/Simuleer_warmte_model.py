@@ -77,35 +77,53 @@ def simuleer_warmte_model(P_in, T_out, S_rad, T_in_0, T_m_0):       # functie om
     #data terugsturen naar controller.py
     T_in = oplossing.y[0, :]
     T_m = oplossing.y[1, :]
+    T_in_time = oplossing.t
+    T_m_time = oplossing.t
     T_in = [round(i-273.15,2) for i in T_in]
     T_m = [round(i-273.15,2) for i in T_m]
-
-    return T_in, T_m                                        #terugsturen van de lijsten met binnentemperatuur en temperatuur van de bouwmassa
+    T_in_time = [round(i/(60*60),2) for i in T_in_time]
+    T_m_time = [round(i/(60*60),2) for i in T_m_time]
+    return T_in, T_m, T_in_time, T_m_time                                      #terugsturen van de lijsten met binnentemperatuur en temperatuur van de bouwmassa
 
 #test
-[T_in, T_m] = simuleer_warmte_model(0, 10, 0, 20, 20)
+[T_in, T_m, T_in_time, T_m_time] = simuleer_warmte_model(0, 10, 0, 20, 20)
 #create a loop that runs the simulation for 24 hours and uses the last element of T_in and T_m as the new T_in_0 and T_m_0
 #make sure all temperatures are stored in one list, so it can be plotted
-for i in range(11):
-    [T_in_temp, T_m_temp] = simuleer_warmte_model(0, 10, 20, T_in[-1], T_m[-1])
+'''for i in range(11):
+    [T_in_temp, T_m_temp, T_in_temp_t, T_m_temp_t] = simuleer_warmte_model(0, 10, 20, T_in[-1], T_m[-1])
     T_in = np.concatenate((T_in, T_in_temp))
     T_m = np.concatenate((T_m, T_m_temp))
+    T_in_temp_t = [(i+j) for j in T_m_temp_t]
+    T_m_temp_t = [(i+j) for j in T_m_temp_t]
+    T_in_time = np.concatenate((T_in_time, T_in_temp_t))
+    T_m_time = np.concatenate((T_m_time, T_m_temp_t))
 for i in range(6):
-    [T_in_temp, T_m_temp] = simuleer_warmte_model(2000, 15, 100, T_in[-1], T_m[-1])
+    [T_in_temp, T_m_temp, T_in_temp_t, T_m_temp_t] = simuleer_warmte_model(2000, 15, 100, T_in[-1], T_m[-1])
     T_in = np.concatenate((T_in, T_in_temp))
     T_m = np.concatenate((T_m, T_m_temp))
+    T_in_temp_t = [((11+i)+j) for j in T_m_temp_t]
+    T_m_temp_t = [((11+i)+j) for j in T_m_temp_t]
+    T_in_time = np.concatenate((T_in_time, T_in_temp_t))
+    T_m_time = np.concatenate((T_m_time, T_m_temp_t))
 for i in range(6):
-    [T_in_temp, T_m_temp] = simuleer_warmte_model(0, 15, 0, T_in[-1], T_m[-1])
+    [T_in_temp, T_m_temp, T_in_temp_t, T_m_temp_t] = simuleer_warmte_model(0, 15, 0, T_in[-1], T_m[-1])
     T_in = np.concatenate((T_in, T_in_temp))
     T_m = np.concatenate((T_m, T_m_temp))
+    T_in_temp_t = [((17+i)+j) for j in T_m_temp_t]
+    T_m_temp_t = [((17+i)+j) for j in T_m_temp_t]
+    T_in_time = np.concatenate((T_in_time, T_in_temp_t))
+    T_m_time = np.concatenate((T_m_time, T_m_temp_t))'''
 
 print(T_in)
 print(T_m)
-print (len(T_in))
+print(T_in_time)
+print(T_m_time)
+print(len(T_in))
+print(len(T_in_time))
 t = np.linspace(0,len(T_in), len(T_in))                            #tijd wordt opgedeeld in n gelijke stukken van lengte h
 plt.figure("Temperatuur")                               #maak een figuur met naam "Temperatuur"
-plt.plot(t*24/len(T_in),T_in,'b', label='T_in')       #plot binnentemperatuur (Celsius) i.f.v. tijd (uur)
-plt.plot(t*24/len(T_in),T_m,'g', label='T_m')         #plot temperatuur (Celsius) van de bouwmassa i.f.v. tijd (uur)
+plt.plot(T_in_time,T_in,'b', label='T_in')       #plot binnentemperatuur (Celsius) i.f.v. tijd (uur)
+plt.plot(T_m_time,T_m,'g', label='T_m')         #plot temperatuur (Celsius) van de bouwmassa i.f.v. tijd (uur)
 plt.xlabel('Tijd (uur)')                                #label x-as
 plt.ylabel('Temperatuur (°C)')                          #label y-as
 plt.title('Binnen- en buitentemperatuur zonnehuis')     #titel van de grafiek
