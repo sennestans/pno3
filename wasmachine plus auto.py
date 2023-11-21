@@ -1,5 +1,21 @@
+#een functie om de actuele tijd bij te houden
+def klok(t):
+    if t+1 < 24:
+        return t+1
+    else:
+        return 0
+
 Delta_t = 1 # tijdsinterval (h)
-horizon = 24 # dit is de duur van ons tijdsinterval
+horizon = 10 # dit is de duur van ons tijdsinterval
+wm_aanuit = 1
+auto_aanuit = 1
+
+actuele_tijd = klok(6)
+#start- en stopuren
+wm_startuur = 8
+wm_einduur = 16
+wm_autostart = 18
+wm_autoeind = 6
 # kost energie (varieert per tijdsinterval) (EUR/kWh)
 kost = [533.92,479.90,480,428.70,407.75,402.06,550,598.90,600,613.59,575.09,560,525.40,526.69,528.77,521.99,511.39,542.04,580.42,645.07,644.38,600.06,552.73,524.93]
 
@@ -40,14 +56,14 @@ m.ebuy = pe.Var(pe.RangeSet(1,horizon), within=pe.NonNegativeReals)
 m.esell = pe.Var(pe.RangeSet(1,horizon), within=pe.NonNegativeReals)
 
 peerijs = sum(kost[i-1]/1000*(m.ebuy[i]-1/3*m.esell[i]) for i in range(1,horizon))
-m.obj = pe.Objective(expr= peerijs, sense = pe.maximize)
+m.obj = pe.Objective(expr= peerijs, sense = pe.minimize)
 
 #auto staat 1 interval aan
-auto_con_expr = sum(m.auto[i] for i in range(1,horizon)) == 3
+auto_con_expr = sum(m.auto[i] for i in range(1,horizon)) == 3*auto_aanuit
 m.auto_con = pe.Constraint(expr = auto_con_expr)
 
 # Add constraints: de wasmachine moet gedurende 2 tijdsintervallen aanstaan
-wm_con_expr = sum(m.wm[i] for i in range(1,horizon)) == 2
+wm_con_expr = sum(m.wm[i] for i in range(1,horizon)) == 2*wm_aanuit
 m.wm_con = pe.Constraint(expr = wm_con_expr)
 
 # 2 tijdsintervallen na elkaar voor het wasmachien
@@ -83,3 +99,4 @@ for i in range(1,horizon):
 print(pe.value(m.ebuy[10]))
 print(pe.value(m.esell[10]))
 print(eff*zp_opp*irradiantie[9]*kost[9]/1000)
+
