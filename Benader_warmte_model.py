@@ -1,5 +1,5 @@
 #Benadering model warmtecircuit
-def benader_warmte_model_start(P_in, T_out, S_rad, T_in_0, T_m_0):  #functie om het warmtemodel te benaderen
+def benader_warmte_model(P_in, T_out, S_rad, T_in_0, T_m_0):  #functie om het warmtemodel te benaderen
                                                                     #input:
                                                                     # lijst met vermogen (W) van de warmtepomp
                                                                     # lijst met buitentemperaturen (K)

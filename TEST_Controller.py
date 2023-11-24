@@ -1,5 +1,8 @@
 #imports
-from Simuleer_warmte_model.py import simuleer_warmte_model
+from Simuleer_warmte_model import simuleer_warmte_model
+from Benader_warmte_model import benader_warmte_model
+from Benader_warmte_model_start import benader_warmte_model_start
+
 #een functie om de actuele tijd bij te houden
 
 Delta_t = 1 # tijdsinterval (h)
