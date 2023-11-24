@@ -18,10 +18,10 @@ def benader_warmte_model_start(T_out, S_rad):           #functie om het warmtemo
             temp_list.extend([i] * N)   #voeg het element N keer toe aan de tijdelijke lijst
         return temp_list                #geef de tijdelijke lijst terug
 
-    def extend_list(L, N):              #functie om lijsten te verlengen
+    def shorten_list(L, N):             #functie om lijsten te verkorten
         temp_list = []                  #maak een tijdelijke lijst
-        for i in L:                     #voor elk element in de lijst L
-            temp_list.extend([i] * N)   #voeg het element N keer toe aan de tijdelijke lijst
+        for i in range(len(L))[::N]:    #voor elk element in de lijst L, beginnend bij het eerste element, met stapgrootte N
+            temp_list.append(L[i])      #voeg het element toe aan de tijdelijke lijst
         return temp_list                #geef de tijdelijke lijst terug
 
     #string to float

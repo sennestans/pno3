@@ -1,9 +1,11 @@
+#file in progress voor controller demodag
 #imports
 from Simuleer_warmte_model import simuleer_warmte_model
 from Benader_warmte_model import benader_warmte_model
 from Benader_warmte_model_start import benader_warmte_model_start
+from GetfromDB import getFromDB
+from GetfromDB import getTempFromDB
 
-#een functie om de actuele tijd bij te houden
 
 Delta_t = 1 # tijdsinterval (h)
 horizon = 10 # dit is de duur van ons tijdsinterval
@@ -17,6 +19,7 @@ eau = 7.4 # vermogen laadpaal (kW)
 # irradiantie van de zon (varieert per tijdsinterval) (kWh/m^2)
 
 irradiantie = [0,0,0,0,0,0,0,0.1,0.3,0.4,0.8,1.2,2,1.6,2.2,1.2,0.3,0.3,0.2,0.1,0,0,0,0]
+buitentemp = [10,10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,10,10,10,10,10,10,10,10,10,10,10]
 
 zp_opp = 22.4 # oppervlakte zonnepaneel (m^2)
 eff = 0.2  # efficientie zonnepaneel
@@ -84,14 +87,15 @@ for l in range(1,horizon):
 horizon_length = 12  # Lengte van de horizon in tijdstappen (bijv. 12 uur)
 
 current_time = 0  # Begin met tijd 0
-total_time = 36
+total_time = horizon
 while current_time < total_time:
 
     # Definieer de huidige horizon op basis van de huidige tijd
     horizon_start = current_time
     horizon_end = min(current_time + horizon_length, total_time)
-
     # Maak een nieuw optimalisatieprobleem voor de huidige horizon
+    [T_in, T_m] = benader_warmte_model_start(buitentemp[horizon_start:horizon_end],irradiantie[horizon_start:horizon_end])
+
     # Dit omvat het opstellen van variabelen, constraints, en doelfunctie op basis van de huidige horizon
 
     # Definieer je variabelen, parameters, constraints en doelfunctie voor de huidige horizon

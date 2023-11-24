@@ -4,6 +4,12 @@ import mysql.connector
 
 def removeSpaces(string):
         return reduce(lambda x, y: (x + y) if (y != " ") else x, string, "");
+def removespecial(lijnen):
+    l = 0
+    while l < len(lijnen):
+        lijnen[l]=lijnen[l].replace("„","")
+        l+=1
+    return lijnen
 
 def removeLetter(letter):
     csv_file=open("test.csv")
@@ -31,7 +37,9 @@ db = mysql.connector.connect(
     passwd="Azerty123",
     database="pno3"
     )
-data=removeLetter("Ä")
+data=removeLetter("Ã")
+data=removespecial(data)
+print(data)
 data2 = leesIn("test2.csv")
 mycursor = db.cursor()
 for element in data:
