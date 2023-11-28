@@ -30,7 +30,7 @@ from GetfromDB import getFromDB
 from GetfromDB import getTempFromDB
 from Optimalisatie import optimaliseer
 import numpy as np
-
+gdehjdegzhezkghedzk
 #constanten
 delta_t = 1                     # tijdsinterval (h)
 horizon = 24                    # lengte van de horizon (h)
