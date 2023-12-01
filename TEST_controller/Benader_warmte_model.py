@@ -10,8 +10,7 @@ def benader_warmte_model(horizon, P_in, T_out, S_rad, T_in_0, T_m_0):  #functie 
                                                                     # lijst met binnentemperaturen (Celsius)
                                                                     # lijst met temperaturen van de bouwmassa (Celsius)
 
-    print(P_in)
-    print(len(P_in))
+    
     #importeren van modules
     import numpy as np
     import matplotlib.pyplot as plt

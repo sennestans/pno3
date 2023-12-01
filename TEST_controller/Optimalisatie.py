@@ -11,11 +11,6 @@ def optimaliseer(horizon, irradiantie, netstroom, zp_opp, eff, ewm, eau, delta_t
         return temp_list                #geef de tijdelijke lijst terug
 
     m = pe.ConcreteModel(name='Optimalisatie')  # maak een concreet model
-    print('meegegeven wm_aan', wm_aan)
-    print('meegegeven auto_aan', auto_aan)
-    print('meegegeven T_in_0', T_in_0)
-    print('meegegeven T_m_0', T_m_0)
-
     #warmtepomp parameters
     t0 = 0  # begintijdstip
     t_end = horizon * 60 * 60  # aantal seconden in de horizon
@@ -131,37 +126,33 @@ def optimaliseer(horizon, irradiantie, netstroom, zp_opp, eff, ewm, eau, delta_t
 
     #haal data uit resultaat en stuur terug
     resultaat = {}
-    print("wp values per half uur:")
     x= 0
-    for i in range(1, N * horizon + 1):
-        print(pe.value(m.wp[i]))
+    '''for i in range(1, N * horizon + 1):
+        #print(pe.value(m.wp[i]))
         x+=1
-    print("wpsum values per uur:")
+    #print("wpsum values per uur:")
     for i in range(1, horizon + 1):
-        print(pe.value(m.wpsum[i]))
-    print("T_in per half uur")
-    l = 0
+        #print(pe.value(m.wpsum[i]))
+    #print("T_in per half uur")
+        l = 0
     for i in range(1, N * horizon + 1):
-        print(pe.value(m.T_in[i])-K)
+        #print(pe.value(m.T_in[i])-K)
         l+=1
-    print("T_m per half uur")
     for i in range(1, N * horizon + 1):
-        print(pe.value(m.T_m[i])-K)
-    print("lengte wp per half uur", x)
-    print("lengte T_in per half uur", l)
+        #print(pe.value(m.T_m[i])-K) '''
     resultaat['result'] = result
-    resultaat['wp'] = [pe.value(m.wp[i]) for i in range(1, N*horizon + 1)]
-    resultaat['wpsum'] = [pe.value(m.wpsum[i]) for i in range(1, horizon + 1)]
-    resultaat['T_in'] = [pe.value(m.T_in[i])-K for i in range(1, N*horizon + 1)]
-    resultaat['T_m'] = [pe.value(m.T_m[i])-K for i in range(1, N*horizon + 1)]
-    resultaat['auto'] = [pe.value(m.auto[i]) for i in range(1, horizon + 1)]
-    resultaat['wm'] = [pe.value(m.wm[i]) for i in range(1, horizon + 1)]
-    resultaat['ebuy'] = [pe.value(m.ebuy[i]) for i in range(1, horizon + 1)]
-    resultaat['esell'] = [pe.value(m.esell[i]) for i in range(1, horizon + 1)]
-    resultaat['kostprijs_energie'] = pe.value(kostprijs_energie)
+    resultaat['wp'] = [pe.value(m.wp[i]) for i in range(1, N*horizon + 1)] #lijst met vermogen van de warmtepomp (W) per half uur
+    resultaat['wpsum'] = [pe.value(m.wpsum[i]) for i in range(1, horizon + 1)] #lijst met vermogen van de warmtepomp (W) per uur
+    resultaat['T_in'] = [pe.value(m.T_in[i])-K for i in range(1, N*horizon + 1)] #lijst met binnentemperaturen (Celsius) per half uur
+    resultaat['T_m'] = [pe.value(m.T_m[i])-K for i in range(1, N*horizon + 1)] #lijst met temperaturen van de bouwmassa (Celsius) per half uur
+    resultaat['auto'] = [pe.value(m.auto[i]) for i in range(1, horizon + 1)] #lijst met auto aan/uit (0/1) per uur
+    resultaat['wm'] = [pe.value(m.wm[i]) for i in range(1, horizon + 1)] #lijst met wasmachine aan/uit (0/1) per uur
+    resultaat['ebuy'] = [pe.value(m.ebuy[i]) for i in range(1, horizon + 1)] #lijst met energie die we kopen (kWh) per uur
+    resultaat['esell'] = [pe.value(m.esell[i]) for i in range(1, horizon + 1)] #lijst met energie die we verkopen (kWh) per uur
+    resultaat['kostprijs_energie'] = pe.value(kostprijs_energie) #kostprijs van de energie (euro)
     if wm_aan == 2:
-        resultaat['wm_start'] = [pe.value(m.wm_start[i]) for i in range(1, horizon + 1)]
-    resultaat['bkoop'] = [pe.value(m.bkoop[i]) for i in range(1, horizon + 1)]
+        resultaat['wm_start'] = [pe.value(m.wm_start[i]) for i in range(1, horizon + 1)] 
+    resultaat['bkoop'] = [pe.value(m.bkoop[i]) for i in range(1, horizon + 1)] 
     resultaat['bverkoop'] = [pe.value(m.bverkoop[i]) for i in range(1, horizon + 1)]
     resultaat['status'] = result.solver.status
     resultaat['termination_condition'] = result.solver.termination_condition

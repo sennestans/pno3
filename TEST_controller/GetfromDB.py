@@ -460,6 +460,38 @@ def getTempFromDB(date):
     solarenergy.append(float(resultaat[2]))
     return temp, solarenergy
 
+import mysql.connector
+
+def getFullCost():
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="Azerty123",
+        database="pno3"
+    )
+    mycursor = db.cursor()
+    query = "SELECT name, address FROM personen;"
+    mycursor.execute(query)
+    resultaten = mycursor.fetchall()
+    return resultaten
+def getFullTempAndIr():
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="Azerty123",
+        database="pno3"
+    )
+    mycursor = db.cursor()
+    query = "SELECT datum, temp, solarenergy FROM weer"
+    mycursor.execute(query)
+    resultaten = mycursor.fetchall()
+    return resultaten
+# Voorbeeld van hoe je de resultaten kunt gebruiken
+#resultaten = getFullCost()
+
+#print(resultaten)
+resultaten = getFullTempAndIr()
+print(resultaten)
 
 # Test met een voorbeelddatum
 # result = print(getFromDB("2022-12-11"))
